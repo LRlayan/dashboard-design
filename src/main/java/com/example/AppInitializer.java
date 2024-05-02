@@ -14,7 +14,7 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-       Parent rootNode = FXMLLoader.load(getClass().getResource("/view/dashboardForm.fxml"));
+       Parent rootNode = FXMLLoader.load(getClass().getResource("/view/crudOperation.fxml"));
         Scene scene = new Scene(rootNode);
         primaryStage.setScene(scene);
         primaryStage.show();
