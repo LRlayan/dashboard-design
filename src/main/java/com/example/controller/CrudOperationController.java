@@ -5,9 +5,20 @@ import com.example.model.StudentModel;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import org.controlsfx.control.textfield.TextFields;
 
-public class CrudOperationController {
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+public class CrudOperationController implements Initializable {
+    public JFXTextField txtSearchBar;
+
     @FXML
     private JFXTextField txtName;
 
@@ -18,6 +29,11 @@ public class CrudOperationController {
     private JFXTextField txtAge;
 
     StudentModel studentModel = new StudentModel();
+    private List<StudentDTO> studentDTOList = studentModel.getAllStudent();
+    private Set<String> _studentDTOList = new HashSet<>();
+
+    public CrudOperationController() throws SQLException {
+    }
 
     @FXML
     void btnNewOnAction(ActionEvent event) {
@@ -43,5 +59,33 @@ public class CrudOperationController {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 
+    }
+
+    public void searchBarOnAction(ActionEvent event) {
+        setSearchBarDetails();
+    }
+
+    private void setSearchBarDetails() {
+        String studentName = txtSearchBar.getText();
+        for (int i =0; i < studentDTOList.size(); i++){
+            if (studentName.equals(studentDTOList.get(i).getName())){
+                studentDTOList.get(i).getId();
+                txtName.setText(studentDTOList.get(i).getName());
+                txtAddress.setText(studentDTOList.get(i).getAddress());
+                txtAge.setText(String.valueOf(studentDTOList.get(i).getAge()));
+            }
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        searchBar();
+    }
+
+    private void searchBar() {
+        studentDTOList.forEach(studentDTO -> {
+            _studentDTOList.add(studentDTO.getName());
+        });
+        TextFields.bindAutoCompletion(txtSearchBar,_studentDTOList);
     }
 }
