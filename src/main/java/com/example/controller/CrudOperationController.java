@@ -28,6 +28,8 @@ public class CrudOperationController implements Initializable {
     @FXML
     private JFXTextField txtAge;
 
+    private int stuId;
+
     StudentModel studentModel = new StudentModel();
     private List<StudentDTO> studentDTOList = studentModel.getAllStudent();
     private Set<String> _studentDTOList = new HashSet<>();
@@ -54,11 +56,31 @@ public class CrudOperationController implements Initializable {
     @FXML
     void btnRemoveOnAction(ActionEvent event) {
 
+        try{
+            boolean isSaved = studentModel.removeStudent(stuId);
+            if (isSaved){
+                new Alert(Alert.AlertType.INFORMATION,"Remove Student!").show();
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Please Try Again").show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-
+        var studentDTO = new StudentDTO(stuId,txtName.getText(),txtAddress.getText(),Integer.parseInt(txtAge.getText()));
+        try{
+            boolean isSaved = studentModel.updateStudent(studentDTO);
+            if (isSaved){
+                new Alert(Alert.AlertType.INFORMATION,"Update Student!").show();
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Please Try Again").show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void searchBarOnAction(ActionEvent event) {
@@ -69,7 +91,7 @@ public class CrudOperationController implements Initializable {
         String studentName = txtSearchBar.getText();
         for (int i =0; i < studentDTOList.size(); i++){
             if (studentName.equals(studentDTOList.get(i).getName())){
-                studentDTOList.get(i).getId();
+                stuId = studentDTOList.get(i).getId();
                 txtName.setText(studentDTOList.get(i).getName());
                 txtAddress.setText(studentDTOList.get(i).getAddress());
                 txtAge.setText(String.valueOf(studentDTOList.get(i).getAge()));
