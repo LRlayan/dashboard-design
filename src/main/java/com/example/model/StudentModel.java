@@ -39,4 +39,23 @@ public class StudentModel {
         }
         return allStudents;
     }
+
+    public boolean updateStudent(StudentDTO studentDTO) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE student SET name = ?, address = ? , age = ? WHERE id = ?");
+
+        preparedStatement.setString(1,studentDTO.getName());
+        preparedStatement.setString(2,studentDTO.getAddress());
+        preparedStatement.setString(3, String.valueOf(studentDTO.getAge()));
+        preparedStatement.setString(4, String.valueOf(studentDTO.getId()));
+        return preparedStatement.executeUpdate() > 0;
+    }
+
+    public boolean removeStudent(int stuId) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM student WHERE id = ?");
+
+        preparedStatement.setInt(1,stuId);
+        return preparedStatement.executeUpdate() > 0;
+    }
 }
